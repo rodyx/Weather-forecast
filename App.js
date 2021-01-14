@@ -8,6 +8,9 @@ import { Main } from './src/main/Main';
 import { FetchWeatherData } from './src/main/api';
 import { LinearGradient } from 'expo-linear-gradient';
 
+const windWidth = Dimensions.get('window').width;
+const windHeight = Dimensions.get('window').height;
+
 export default function App() {
   const [location, setLocation] = useState(null);
   const [weather, setWeather] = useState({})
@@ -43,15 +46,13 @@ export default function App() {
         colors={['rgba(91,201,250, 0.5)', '#5acbfa']}
         style={styles.background}
       />
-        <Main />
-      
-      
+      <Main />
+
+
       <StatusBar style="black" />
     </View>
   );
 }
-const windWidth = Dimensions.get('window').width;
-const windHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {

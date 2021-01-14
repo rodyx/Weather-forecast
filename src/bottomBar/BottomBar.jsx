@@ -5,42 +5,40 @@ import { useFonts, HammersmithOne_400Regular } from '@expo-google-fonts/hammersm
 import Piles from './Piles';
 import Popup from './Popup';
 
-
+const box1AnimationValue = new Animated.Value(0)
+const box2AnimationValue = new Animated.Value(0)
+const box3AnimationValue = new Animated.Value(0)
 const windWidth = Dimensions.get('window').width;
 const windHeight = Dimensions.get('window').height;
-let k = [0, -300];
 
 export const BottomBar = () => {
-  const box1AnimationValue = React.useRef(new Animated.Value(0)).current;
-  const box2AnimationValue = React.useRef(new Animated.Value(0)).current;
-  const box3AnimationValue = React.useRef(new Animated.Value(0)).current;
-
+  useEffect(() => {
+    buttonPressed();
+  }, [])
+  
   const buttonPressed = () => {
-    Animated.stagger(150, [
+    box1AnimationValue.setValue(0);
+    box2AnimationValue.setValue(0);
+    box3AnimationValue.setValue(0);
+    
+    Animated.stagger(100, [
       Animated.timing(box1AnimationValue, {
         toValue: 1,
-        duration: 300,
+        duration: 450,
         useNativeDriver: true,
       }),
       Animated.timing(box2AnimationValue, {
         toValue: 1,
-        duration: 300,
+        duration: 450,
         useNativeDriver: true,
       }),
       Animated.timing(box3AnimationValue, {
         toValue: 1,
-        duration: 300,
+        duration: 400,
         useNativeDriver: true,
       }),
 
     ]).start()
-  }
-
-  let k = windHeight * 0.5;
-  const test = () => {
-    box1AnimationValue.setValue(0);
-    box2AnimationValue.setValue(0);
-    box3AnimationValue.setValue(0);
   }
 
   return (
@@ -52,19 +50,19 @@ export const BottomBar = () => {
         <TouchableOpacity onPress={buttonPressed}>
           <Text style={styles.dayLinetext}>Afternoon</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={test}>
+        <TouchableOpacity onPress={buttonPressed}>
           <Text style={styles.dayLinetext}>Evening</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.tileWrapper}>
-        
-        
+
+
         <Animated.View style={{
           transform: [
             {
               translateY: box1AnimationValue.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, -700],
+                outputRange: [0, +`${windHeight * -0.78}`],
               }),
             }
           ],
@@ -78,14 +76,12 @@ export const BottomBar = () => {
           </TouchableOpacity>
         </Animated.View>
 
-
-
         <Animated.View style={{
           transform: [
             {
               translateY: box2AnimationValue.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, -700],
+                outputRange: [0, +`${windHeight * -0.78}`],
               }),
             }
           ],
@@ -99,14 +95,13 @@ export const BottomBar = () => {
           </TouchableOpacity>
         </Animated.View>
 
-
-
         <Animated.View style={{
+          ...styles.tile,
           transform: [
             {
               translateY: box3AnimationValue.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, -700],
+                outputRange: [0, +`${windHeight * -0.78}`],
               }),
             }
           ],
@@ -120,11 +115,10 @@ export const BottomBar = () => {
           </TouchableOpacity>
         </Animated.View>
 
-
       </View>
       <StatusBar style="gray" />
     </View>
-     
+
   )
 }
 
@@ -132,7 +126,7 @@ export const BottomBar = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: windWidth-50,
+    width: windWidth - 50,
     paddingVertical: 25,
     justifyContent: 'flex-start',
   },
@@ -151,7 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     height: windHeight,
-    
+
   },
   tile: {
     width: windWidth / 3.7,
