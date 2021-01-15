@@ -3,18 +3,26 @@ import React, { useState, useEffect } from 'react';
 import { Dimensions, Platform, StyleSheet, Text, View } from 'react-native';
 import * as Location from 'expo-location';
 import AppLoading from 'expo-app-loading';
-import { useFonts, Raleway_400Regular } from '@expo-google-fonts/raleway';
 import { Main } from './src/main/Main';
 import { FetchWeatherData } from './src/main/api';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFonts } from 'expo-font';
 
 const windWidth = Dimensions.get('window').width;
 const windHeight = Dimensions.get('window').height;
 
 export default function App() {
-  const [location, setLocation] = useState(null);
-  const [weather, setWeather] = useState({})
-  //const [errorMsg, setErrorMsg] = useState(null);
+  let [fontsLoaded] = useFonts({
+    'Hammersmith-One': require('./assets/fonts/HammersmithOne-Regular.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+  
+  // const [location, setLocation] = useState(null);
+  // const [weather, setWeather] = useState({})
+  // const [errorMsg, setErrorMsg] = useState(null);
 
   // useEffect(() => {
   //   (async () => {
@@ -43,7 +51,7 @@ export default function App() {
     <View style={styles.container}>
       <LinearGradient
         // Background Linear Gradient
-        colors={['rgba(91,201,250, 0.5)', '#5acbfa']}
+        colors={['#6dfae5', '#72efed']}
         style={styles.background}
       />
       <Main />

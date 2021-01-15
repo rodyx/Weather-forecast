@@ -42,7 +42,7 @@ export const BottomBar = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{ paddingVertical: 25,}}>
       <View style={styles.dayLine}>
         <TouchableOpacity onPress={buttonPressed}>
           <Text style={styles.dayLinetext}>Morning</Text>
@@ -124,14 +124,7 @@ export const BottomBar = () => {
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: windWidth - 50,
-    paddingVertical: 25,
-    justifyContent: 'flex-start',
-  },
   dayLine: {
-    fontFamily: 'HammersmithOne_400Regular',
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
@@ -145,7 +138,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     height: windHeight,
-
   },
   tile: {
     width: windWidth / 3.7,
