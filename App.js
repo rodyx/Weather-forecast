@@ -1,15 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
+import 'react-native-gesture-handler';
 import { Dimensions, Platform, StyleSheet, Text, View } from 'react-native';
 import * as Location from 'expo-location';
 import AppLoading from 'expo-app-loading';
 import { Main } from './src/main/Main';
 import { FetchWeatherData } from './src/main/api';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Popup } from './src/popup/Popup';
 
-const windWidth = Dimensions.get('window').width;
-const windHeight = Dimensions.get('window').height;
+const Stack = createStackNavigator();
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -48,34 +50,24 @@ export default function App() {
   // }
 
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        // Background Linear Gradient
-        colors={['#6dfae5', '#72efed']}
-        style={styles.background}
-      />
-      <Main />
-
-
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Popup"
+          component={Popup} 
+          options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
       <StatusBar style="black" />
-    </View>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: windWidth,
-    height: windHeight,
-    paddingHorizontal: 25,
-    paddingVertical: 75,
-    justifyContent: 'flex-start',
-  },
-  background: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: windHeight,
-  },
-});
+// const styles = StyleSheet.create({
+  
+// });

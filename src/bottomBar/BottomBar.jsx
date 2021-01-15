@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Dimensions, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View, Animated, Button, TouchableNativeFeedback, TouchableHighlight } from 'react-native';
 import { Ionicons, Fontisto, MaterialCommunityIcons, SimpleLineIcons, Feather } from '@expo/vector-icons';
 import { useFonts, HammersmithOne_400Regular } from '@expo-google-fonts/hammersmith-one';
-import Piles from './Piles';
 import Popup from './Popup';
 
 const box1AnimationValue = new Animated.Value(0)

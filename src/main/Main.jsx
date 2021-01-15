@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { Dimensions, Image, Animated, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
-import AppLoading from 'expo-app-loading';
 import { Ionicons, Fontisto, MaterialCommunityIcons, SimpleLineIcons, Feather } from '@expo/vector-icons';
-import { Popup } from '../popup/Popup';
+import { Header } from '../header/Header';
+import { LinearGradient } from 'expo-linear-gradient';
+import Cloud from '../../assets/weather-icons/cloud';
 
 const box1AnimationValue = new Animated.Value(0)
 const box2AnimationValue = new Animated.Value(0)
@@ -12,7 +13,7 @@ const box4AnimationValue = new Animated.Value(0)
 const windWidth = Dimensions.get('window').width;
 const windHeight = Dimensions.get('window').height;
 
-export const Main = ({ weather }) => {
+export const Main = ({ navigation }) => {
   useEffect(() => {
     buttonPressed();
   }, [])
@@ -50,7 +51,11 @@ export const Main = ({ weather }) => {
   
   return (
     <View style={styles.container}>
-      <Popup></Popup>
+      <LinearGradient
+        colors={['#6dfae5', '#72efed']}
+        style={styles.background}
+      />
+      <Header screenName="Popup"></Header>
       
       
       <View style={styles.centerContainer}>
@@ -65,7 +70,8 @@ export const Main = ({ weather }) => {
           }
         ],
       }}>
-        <Image style={styles.weatherIcon} source={require('../../assets/weather-icons/thunderstorm.png')} />
+        
+        <Image style={styles.weatherIcon} source={require('../../assets/weather-icons/sun_and_clouds.png')} />
           <Text style={styles.textWeatherCondition}>Cloudy</Text>
           <Text style={styles.textWeatherTemp}> 28°</Text>
           <View>
@@ -159,8 +165,17 @@ export const Main = ({ weather }) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    flex: 5,
+    flex: 1,
     justifyContent: 'flex-start',
+    paddingHorizontal: 25,
+    paddingVertical: 75,
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: '130%',
   },
   container2: {
     justifyContent: "flex-start",
