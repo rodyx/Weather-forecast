@@ -3,12 +3,12 @@ import { StatusBar } from 'expo-status-bar';
 import { Dimensions, Image, Animated, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons  } from '@expo/vector-icons';
 import { ScreenStackHeaderCenterView } from 'react-native-screens';
-import Cloud from '../../assets/weather-icons/cloud';
 import { windHeight, windWidth } from '../../size';
 import { daysOfWeek, dateNow } from '../main/api/getDay';
+import { IoniconsMap, IoniconsMapColors } from '../../assets/weather-icons/Ionicons/IoniconsMap';
 
-
-export const Popup = ({ navigation: { goBack } }) => {
+export const Popup = ({ route, navigation: { goBack } }) => {
+  const { weather } = route.params;
   
   return (
     <View style={styles.container}>
@@ -18,16 +18,16 @@ export const Popup = ({ navigation: { goBack } }) => {
             <MaterialCommunityIcons name="arrow-left" size={30} color="white" />
           </TouchableOpacity>
         </View>
-        <Text style={{ ...styles.text, fontSize: 25, color: 'white' }}>Tashkent</Text>
+        <Text style={{ ...styles.text, fontSize: 25, color: 'white' }}>{weather.timezone.split("/")[1] || weather.timezone}</Text>
       </View>
-
+      
       <View style={styles.wrapperWeather}>
         <View style={styles.messagesWeather}>
           <View style={styles.message}>
             <View style={styles.messageWeatherIcon}>
-              <Image style={{ width: 120, height: 120}} source={require('../../assets/weather-icons/sun_and_clouds.png')} />
+              <Image style={{ width: 120, height: 120 }} source={require('../../assets/weather-icons/sun_and_clouds.png')} />
             </View>
-            <View style={{flex: 2, justifyContent: 'flex-end'}}>
+            <View style={{ flex: 2, justifyContent: 'flex-end' }}>
               <Text style={{ ...styles.text, fontSize: 14, color: '#6b6d76' }}>
                 10 minutes ago
               </Text>
@@ -42,26 +42,28 @@ export const Popup = ({ navigation: { goBack } }) => {
         </View>
         <View style={styles.weekTempWeather}>
           <Text style={{ ...styles.text, fontSize: 22, color: 'white' }}>Next Week</Text>
-          
-          { daysOfWeek.map((elem, ind, array) => {
-            {/* let day = Date.now() + 86400 * 1000 * (ind+1);
-            array[new Date(day).getDay() */}
 
+          {daysOfWeek.map((elem, ind, array) => {
+            let day = Date.now() + 86400 * 1000 * (ind + 1);
+            let gray = 'gray'
+            let red = 'red'
             return (
               <View key={ind} style={styles.dayWrapper}>
-                <Text style={{ ...styles.text, flex: 5 }}>{elem}</Text>
+                <Text style={{ ...styles.text, flex: 5 }}>{array[new Date(day).getDay()]}</Text>
                 <View style={styles.dayTempWrapper}>
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-                    <Text style={styles.text}>31°</Text>
-                    <Text style={{ ...styles.text, marginLeft: 15, color: '#6b6d76' }}>38°</Text>
+                    <Text style={styles.text}>{Math.round(weather.daily[ind + 1].temp.min)}°</Text>
+                    <Text style={{ ...styles.text, marginLeft: 15, color: '#6b6d76' }}>{Math.round(weather.daily[ind + 1].temp.max)}°</Text>
                   </View>
 
-                  <Ionicons name="ios-rainy-outline" size={30} color="gray" />
+                  <Ionicons name={IoniconsMap.get(weather.daily[ind + 1].weather[0].main)} 
+                            size={30} 
+                            color={IoniconsMapColors.get(weather.daily[ind + 1].weather[0].main)} />
                 </View>
 
               </View>
             )
-          
+
           })}
 
         </View>

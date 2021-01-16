@@ -6,11 +6,11 @@ import {
     View,
     Animated,
 } from "react-native";
-import { Ionicons, Fontisto, MaterialCommunityIcons, SimpleLineIcons, Feather } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { windHeight, windWidth } from "../../size";
+import { IoniconsMap } from "../../assets/weather-icons/Ionicons/IoniconsMap";
 
 export const Tile = ({ animationObj, index, weather}) => {
-  
   return (
     <Animated.View style={{
       transform: [
@@ -25,7 +25,7 @@ export const Tile = ({ animationObj, index, weather}) => {
       <TouchableOpacity onPress={() => alert('edikl')}>
         <View style={styles.tile}>
           <Text style={styles.tileTime}>{8 + index * 7}:00</Text>
-          <Feather name="sun" size={55} color="white" />
+          <Ionicons name={IoniconsMap.get(weather.weather[0].main)} size={55} color="white" />
           <View style={styles.tileTempWrapper}>
             <Text style={styles.tileTemp}>{Math.round(weather.temp[['morn', 'eve', 'night'][index]])}</Text>
             <View style={styles.degree}><Text style={{ fontSize: 25, color: "#41406e"}}>°</Text></View>
@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   degree: {
-    position: 'absolute', 
-    top: 3, 
-    left: windWidth / 11
+    position: 'relative', 
+    top: 2,
+    left: 2
   }
 });

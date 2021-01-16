@@ -4,7 +4,6 @@ import { Image, Animated, StyleSheet, Text, View,TouchableOpacity } from 'react-
 import { Ionicons, Fontisto, MaterialCommunityIcons, SimpleLineIcons, Feather } from '@expo/vector-icons';
 import { Header } from '../header/Header';
 import { LinearGradient } from 'expo-linear-gradient';
-import Cloud from '../../assets/weather-icons/cloud';
 import { windHeight, windWidth } from '../../size';
 import * as Location from 'expo-location';
 import { FetchWeatherData } from './api';
@@ -18,9 +17,9 @@ const tile3AnimVal = new Animated.Value(0)
 const centerViewAnimVal = new Animated.Value(0)
 
 export const Main = ({ navigation }) => {
-  const [weather, setWeather] = useState()
-  const [currentWeather, setCurrentWeather] = useState()
-  const [wetIndex, setWetIndex] = useState(0)
+  const [weather, setWeather] = useState();
+  const [currentWeather, setCurrentWeather] = useState();
+  const [wetIndex, setWetIndex] = useState(0);
   
   useEffect(() => {
     (async () => {
@@ -78,7 +77,7 @@ export const Main = ({ navigation }) => {
         style={styles.background}
       />
       
-      <Header screenName="Popup" weather={weather} />
+      {weather && <Header screenName="Popup" weather={weather} />}
       
       {currentWeather && <Center animationObj={centerViewAnimVal} weather={currentWeather} />}
       

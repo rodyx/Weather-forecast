@@ -27,13 +27,17 @@ export const Center = ({ animationObj, weather }) => {
 
         <Image style={{ width: 220, height: 220 }} source={require('../../../assets/weather-icons/sun_and_clouds.png')} />
         <Text style={{ ...styles.textCenter, fontSize: 25}}>{weather.weather[0].main}</Text>
-        <Text style={{ ...styles.textCenter, fontSize: 120 }}>{Math.round(weather?.temp) || Math.round(weather?.temp.day)}°</Text>
+        <View style={{ flexDirection: 'row'}}>
+          <Text style={{ ...styles.textCenter, fontSize: 120 }}>{Math.round(weather?.temp) || Math.round(weather?.temp.day)}</Text>
+          <View style={styles.degree}><Text style={{ fontSize: 60, color: "#41406e" }}>°</Text></View>
+        </View>
+        
         <View style={styles.smallBox}>
           <View style={{flexDirection: 'row'}}>
             <MaterialCommunityIcons name="weather-windy" size={16} color="#41406e" />
             <Text style={{ ...styles.textCenter, marginLeft: 8 }}>{weather.wind_speed} km/h</Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
             <SimpleLineIcons name="drop" size={16} color="#41406e" />
             <Text style={{ ...styles.textCenter, marginLeft: 8 }}>{weather.humidity} %</Text>
           </View>
@@ -66,4 +70,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Hammersmith-One',
     color: '#41406e',
   },
+  degree: {
+    position: "relative",
+    top: 10,
+    left: 5,
+  }
 });
