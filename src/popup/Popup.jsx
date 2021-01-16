@@ -45,8 +45,7 @@ export const Popup = ({ route, navigation: { goBack } }) => {
 
           {daysOfWeek.map((elem, ind, array) => {
             let day = Date.now() + 86400 * 1000 * (ind + 1);
-            let gray = 'gray'
-            let red = 'red'
+            
             return (
               <View key={ind} style={styles.dayWrapper}>
                 <Text style={{ ...styles.text, flex: 5 }}>{array[new Date(day).getDay()]}</Text>

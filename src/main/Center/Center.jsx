@@ -10,7 +10,6 @@ import { Ionicons, Fontisto, MaterialCommunityIcons, SimpleLineIcons, Feather } 
 import { windHeight, windWidth } from "../../../size";
 
 export const Center = ({ animationObj, weather }) => {
-  
   return (
     <View style={styles.centerContainer}>
       <Animated.View style={{
@@ -25,8 +24,8 @@ export const Center = ({ animationObj, weather }) => {
         ],
       }}>
 
-        <Image style={{ width: 220, height: 220 }} source={require('../../../assets/weather-icons/sun_and_clouds.png')} />
-        <Text style={{ ...styles.textCenter, fontSize: 25}}>{weather.weather[0].main}</Text>
+        <Image style={{ width: 200, height: 200 }} source={require('../../../assets/weather-icons/Clear.png')} />
+        <Text style={{ ...styles.textCenter, fontSize: 25, marginTop: 10}}>{weather.weather[0].main}</Text>
         <View style={{ flexDirection: 'row'}}>
           <Text style={{ ...styles.textCenter, fontSize: 120 }}>{Math.round(weather?.temp) || Math.round(weather?.temp.day)}</Text>
           <View style={styles.degree}><Text style={{ fontSize: 60, color: "#41406e" }}>°</Text></View>

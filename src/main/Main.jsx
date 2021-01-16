@@ -16,10 +16,11 @@ const tile2AnimVal = new Animated.Value(0)
 const tile3AnimVal = new Animated.Value(0)
 const centerViewAnimVal = new Animated.Value(0)
 
-export const Main = ({ navigation }) => {
+export const Main = () => {
   const [weather, setWeather] = useState();
   const [currentWeather, setCurrentWeather] = useState();
   const [wetIndex, setWetIndex] = useState(0);
+  const [stateButton, setActiveButton] = useState({ active: null })
   
   useEffect(() => {
     (async () => {
@@ -89,24 +90,28 @@ export const Main = ({ navigation }) => {
               buttonPressed()
               setWetIndex(0)
               setCurrentWeather(weather.current)
+              setActiveButton({ active: 0 })
               }}>
-            <Text style={styles.dayLinetext}>{getDay('today')}</Text>
+            <Text style={stateButton.active === 0 ? styles.btnActive : styles.dayLinetext}>{getDay('today')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               buttonPressed()
               setWetIndex(1)
               setCurrentWeather(weather.daily[1])
-            }}>
-            <Text style={styles.dayLinetext}>{getDay('tomorrow')}</Text>
+              setActiveButton({ active: 1 })
+              }}
+            >
+            <Text style={stateButton.active === 1 ? styles.btnActive : styles.dayLinetext}>{getDay('tomorrow')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               buttonPressed()
               setWetIndex(2)
               setCurrentWeather(weather.daily[2])
+              setActiveButton({ active: 2 })
             }}>
-            <Text style={styles.dayLinetext}>{getDay('after')}</Text>
+            <Text style={stateButton.active === 2 ? styles.btnActive : styles.dayLinetext}>{getDay('after')}</Text>
           </TouchableOpacity>
         </View>
         
@@ -148,51 +153,19 @@ const styles = StyleSheet.create({
     top: 0,
     height: '130%',
   },
-  container2: {
-    justifyContent: "flex-start",
-    height: 50,
-    width: 200,
-  },
-  weatherIcon: {
-    width: 220,
-    height: 220,
-  },
-  centerContainer: {
-    height: windHeight * 0.5,
-    paddingHorizontal: 25,
-    paddingVertical: 25,
-    alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  animContainer: {
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    position: 'relative',
-    left: windWidth,
-  },
-  textCity: {
-    fontSize: 25,
-    fontFamily: 'Hammersmith-One',
-    color: '#41406e',
-  },
-  textWeatherCondition: {
-    fontSize: 25,
-    fontFamily: 'Hammersmith-One',
-    color: '#41406e',
-  },
-  textWeatherTemp: {
-    fontSize: 120,
-    fontFamily: 'Hammersmith-One',
-    color: '#41406e',
-  },
-
   dayLine: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  btnActive: {
+    fontFamily: 'Hammersmith-One',
+    color: "#41406e",
+    opacity: 1,
+  },
   dayLinetext: {
     fontFamily: 'Hammersmith-One',
     color: "#41406e",
+    opacity: 0.4,
   },
   tileWrapper: {
     paddingTop: 20,
@@ -201,21 +174,5 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     height: windHeight,
   },
-  tile: {
-    width: windWidth / 3.7,
-    height: windHeight / 5,
-    backgroundColor: '#95f6f5',
-    borderRadius: 15,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
-  tileTime: {
-    fontFamily: 'Hammersmith-One',
-    color: "gray",
-  },
-  tileTemp: {
-    fontSize: 40,
-    fontFamily: 'Hammersmith-One',
-    color: "#41406e",
-  },
+  
 });
