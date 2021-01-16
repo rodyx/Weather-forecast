@@ -1,53 +1,75 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Dimensions, Image, Animated, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
+import { Image, Animated, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import { Ionicons, Fontisto, MaterialCommunityIcons, SimpleLineIcons, Feather } from '@expo/vector-icons';
 import { Header } from '../header/Header';
 import { LinearGradient } from 'expo-linear-gradient';
 import Cloud from '../../assets/weather-icons/cloud';
+import { windHeight, windWidth } from '../../size';
+import * as Location from 'expo-location';
+import { FetchWeatherData } from './api';
+import {Tile} from '../bottomBar/Tile';
+import { Center } from './Center/Center';
+import { getDay } from './api/getDay';
 
-const box1AnimationValue = new Animated.Value(0)
-const box2AnimationValue = new Animated.Value(0)
-const box3AnimationValue = new Animated.Value(0)
-const box4AnimationValue = new Animated.Value(0)
-const windWidth = Dimensions.get('window').width;
-const windHeight = Dimensions.get('window').height;
+const tile1AnimVal = new Animated.Value(0)
+const tile2AnimVal = new Animated.Value(0)
+const tile3AnimVal = new Animated.Value(0)
+const centerViewAnimVal = new Animated.Value(0)
 
 export const Main = ({ navigation }) => {
+  const [weather, setWeather] = useState()
+  const [currentWeather, setCurrentWeather] = useState()
+  const [wetIndex, setWetIndex] = useState(0)
+  
   useEffect(() => {
-    buttonPressed();
-  }, [])
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Permission to access location was denied');
+        return;
+      } else {
+        let location = await Location.getCurrentPositionAsync({});
+
+        FetchWeatherData(location.coords.latitude, location.coords.longitude)
+          .then(res => {
+            setWeather(res)
+            setCurrentWeather(res.current)
+            buttonPressed();
+          })
+      }
+    })();
+  }, []);
 
   const buttonPressed = () => {
-    box1AnimationValue.setValue(0);
-    box2AnimationValue.setValue(0);
-    box3AnimationValue.setValue(0);
-    box4AnimationValue.setValue(0)
+    tile1AnimVal.setValue(0);
+    tile2AnimVal.setValue(0);
+    tile3AnimVal.setValue(0);
+    centerViewAnimVal.setValue(0);
 
     Animated.stagger(75, [
-      Animated.timing(box4AnimationValue, {
+      Animated.timing(centerViewAnimVal, {
         toValue: 1,
         duration: 250,
         useNativeDriver: true,
       }),
-      Animated.timing(box1AnimationValue, {
+      Animated.timing(tile1AnimVal, {
         toValue: 1,
         duration: 450,
         useNativeDriver: true,
       }),
-      Animated.timing(box2AnimationValue, {
+      Animated.timing(tile2AnimVal, {
         toValue: 1,
         duration: 450,
         useNativeDriver: true,
       }),
-      Animated.timing(box3AnimationValue, {
+      Animated.timing(tile3AnimVal, {
         toValue: 1,
         duration: 400,
         useNativeDriver: true,
       }),
     ]).start()
   }
-
   
   return (
     <View style={styles.container}>
@@ -55,109 +77,59 @@ export const Main = ({ navigation }) => {
         colors={['#6dfae5', '#72efed']}
         style={styles.background}
       />
-      <Header screenName="Popup"></Header>
       
+      <Header screenName="Popup" weather={weather} />
       
-      <View style={styles.centerContainer}>
-      <Animated.View style={{
-        ...styles.animContainer,
-        transform: [
-          {
-            translateX: box4AnimationValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, +`${windWidth * -1}`],
-            }),
-          }
-        ],
-      }}>
+      {currentWeather && <Center animationObj={centerViewAnimVal} weather={currentWeather} />}
+      
+      <View style={{ paddingVertical: 25 }}>
         
-        <Image style={styles.weatherIcon} source={require('../../assets/weather-icons/sun_and_clouds.png')} />
-          <Text style={styles.textWeatherCondition}>Cloudy</Text>
-          <Text style={styles.textWeatherTemp}> 28°</Text>
-          <View>
-            <Text style={{color: '#41406e'}}><MaterialCommunityIcons name="weather-windy" size={16} color="#41406e" /> 8 km/h  <SimpleLineIcons name="drop" size={16} color="#41406e" /> 47 %</Text>
-          </View>
-      </Animated.View>
-      </View>
-      
-      <View style={{ paddingVertical: 25, }}>
         <View style={styles.dayLine}>
-          <TouchableOpacity onPress={buttonPressed}>
-            <Text style={styles.dayLinetext}>Morning</Text>
+          <TouchableOpacity 
+            onPress={() => {
+              buttonPressed()
+              setWetIndex(0)
+              setCurrentWeather(weather.current)
+              }}>
+            <Text style={styles.dayLinetext}>{getDay('today')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={buttonPressed}>
-            <Text style={styles.dayLinetext}>Afternoon</Text>
+          <TouchableOpacity
+            onPress={() => {
+              buttonPressed()
+              setWetIndex(1)
+              setCurrentWeather(weather.daily[1])
+            }}>
+            <Text style={styles.dayLinetext}>{getDay('tomorrow')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={buttonPressed}>
-            <Text style={styles.dayLinetext}>Evening</Text>
+          <TouchableOpacity
+            onPress={() => {
+              buttonPressed()
+              setWetIndex(2)
+              setCurrentWeather(weather.daily[2])
+            }}>
+            <Text style={styles.dayLinetext}>{getDay('after')}</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.tileWrapper}>
-
-
-          <Animated.View style={{
-            transform: [
-              {
-                translateY: box1AnimationValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, +`${windHeight * -0.78}`],
-                }),
-              }
-            ],
-          }}>
-            <TouchableOpacity onPress={() => alert('edikl')}>
-              <View style={styles.tile}>
-                <Text style={styles.tileTime}>19:00</Text>
-                <Text><Feather name="sun" size={55} color="white" /></Text>
-                <Text style={styles.tileTemp}>21°</Text>
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
-
-          <Animated.View style={{
-            transform: [
-              {
-                translateY: box2AnimationValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, +`${windHeight * -0.78}`],
-                }),
-              }
-            ],
-          }}>
-            <TouchableOpacity onPress={() => alert('222edikl')}>
-              <View style={styles.tile}>
-                <Text style={styles.tileTime}>13:00</Text>
-                <Text><Ionicons name="ios-rainy-outline" size={55} color="white" /></Text>
-                <Text style={styles.tileTemp}>18°</Text>
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
-
-          <Animated.View style={{
-            transform: [
-              {
-                translateY: box3AnimationValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, +`${windHeight * -0.78}`],
-                }),
-              }
-            ],
-          }}>
-            <TouchableOpacity onPress={() => alert('edikl')}>
-              <View style={styles.tile}>
-                <Text style={styles.tileTime}>19:00</Text>
-                <Text><Ionicons name="ios-cloudy-outline" size={55} color="white" /></Text>
-                <Text style={styles.tileTemp}>21°</Text>
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
-
-        </View>
-        <StatusBar style="gray" />
+        
+        {weather ? 
+          
+        (<View style={styles.tileWrapper}>
+          {[tile1AnimVal, tile2AnimVal, tile3AnimVal].map((item, index) => {
+            return (
+            <Tile 
+            animationObj={item} 
+            key={index} 
+            index={index}
+            weather={weather.daily[wetIndex]} />
+            )
+          })}
+        </View>) : (<View />)}
+        
+        
       </View>
 
 
-      <StatusBar style="auto" />
+      <StatusBar style="dark" />
     </View>
   )
 }

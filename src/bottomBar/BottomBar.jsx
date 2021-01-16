@@ -10,7 +10,7 @@ const box3AnimationValue = new Animated.Value(0)
 const windWidth = Dimensions.get('window').width;
 const windHeight = Dimensions.get('window').height;
 
-export const BottomBar = () => {
+const BottomBar = () => {
   useEffect(() => {
     buttonPressed();
   }, [])
