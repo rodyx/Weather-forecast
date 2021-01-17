@@ -3,15 +3,21 @@ import { Ionicons, Feather } from '@expo/vector-icons';
 import { Dimensions, Image, Animated, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export const Header = ({ weather }) => {
+export const Header = ({ weather, setReset, reset, setWeather, setCurWet }) => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container2}>
-      <Text>
-        <Ionicons name="ios-location-sharp" size={24} color="#41406e" />
-        <Text style={styles.textCity}> {weather.timezone.split("/")[1] || weather.timezone}</Text>
-      </Text>
+      <TouchableOpacity onPress={() => {
+        setWeather()
+        setCurWet()
+        setReset(!reset)
+        }}>
+        <Text>
+          <Ionicons name="ios-location-sharp" size={24} color="#41406e" />
+          <Text style={styles.textCity}> {weather.timezone.split("/")[1] || weather.timezone}</Text>
+        </Text>
+      </TouchableOpacity>
       <Text>
         <TouchableOpacity onPress={() =>
           navigation.push('Popup', { weather: weather })

@@ -22,12 +22,12 @@ export const Tile = ({ animationObj, index, weather}) => {
         }
       ],
     }}>
-      <TouchableOpacity onPress={() => alert('edikl')}>
+      <TouchableOpacity>
         <View style={styles.tile}>
-          <Text style={styles.tileTime}>{8 + index * 7}:00</Text>
+          <Text style={styles.tileTime}>{9 + index * 6}:00</Text>
           <Ionicons name={IoniconsMap.get(weather.weather[0].main)} size={55} color="white" />
           <View style={styles.tileTempWrapper}>
-            <Text style={styles.tileTemp}>{Math.round(weather.temp[['morn', 'eve', 'night'][index]])}</Text>
+            <Text style={styles.tileTemp}>{Math.round(weather.temp[['morn', 'max', 'night'][index]])}</Text>
             <View style={styles.degree}><Text style={{ fontSize: 25, color: "#41406e"}}>°</Text></View>
           </View>
         </View>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   tile: {
     width: windWidth / 3.7,
     height: windHeight / 5,
-    backgroundColor: '#95f6f5',
+    backgroundColor: '#95dfff',
     borderRadius: 15,
     justifyContent: 'space-evenly',
     alignItems: 'center',

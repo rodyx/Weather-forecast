@@ -1,15 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Image, Animated, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
-import { Ionicons, Fontisto, MaterialCommunityIcons, SimpleLineIcons, Feather } from '@expo/vector-icons';
+import { Animated, StyleSheet, View, ActivityIndicator} from 'react-native';
 import { Header } from '../header/Header';
 import { LinearGradient } from 'expo-linear-gradient';
-import { windHeight, windWidth } from '../../size';
+import { windHeight, windWidth} from '../../size';
 import * as Location from 'expo-location';
-import { FetchWeatherData } from './api';
+import { FetchWeatherData } from '../api';
 import {Tile} from '../bottomBar/Tile';
 import { Center } from './Center/Center';
-import { getDay } from './api/getDay';
+import { DayOfLine } from './DayOfLine/DayOfLine';
 
 const tile1AnimVal = new Animated.Value(0)
 const tile2AnimVal = new Animated.Value(0)
@@ -17,6 +16,7 @@ const tile3AnimVal = new Animated.Value(0)
 const centerViewAnimVal = new Animated.Value(0)
 
 export const Main = () => {
+  const [reset, setReset] = useState(false)
   const [weather, setWeather] = useState();
   const [currentWeather, setCurrentWeather] = useState();
   const [wetIndex, setWetIndex] = useState(0);
@@ -37,9 +37,10 @@ export const Main = () => {
             setCurrentWeather(res.current)
             buttonPressed();
           })
+          .catch(() => alert('Check your internet connection'))
       }
     })();
-  }, []);
+  }, [reset]);
 
   const buttonPressed = () => {
     tile1AnimVal.setValue(0);
@@ -74,46 +75,40 @@ export const Main = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#6dfae5', '#72efed']}
+        colors={['#5ae4fe', '#5acbfa']}
         style={styles.background}
       />
+
+      {!weather && <ActivityIndicator size="large" color="white" style={styles.activityInd}/>}
       
-      {weather && <Header screenName="Popup" weather={weather} />}
+      {weather && <Header
+        screenName="Popup"
+        weather={weather}
+        setReset={setReset}
+        reset={reset}
+        setWeather={setWeather}
+        setCurWet={setCurrentWeather} />}
       
       {currentWeather && <Center animationObj={centerViewAnimVal} weather={currentWeather} />}
       
       <View style={{ paddingVertical: 25 }}>
         
-        <View style={styles.dayLine}>
-          <TouchableOpacity 
-            onPress={() => {
-              buttonPressed()
-              setWetIndex(0)
-              setCurrentWeather(weather.current)
-              setActiveButton({ active: 0 })
-              }}>
-            <Text style={stateButton.active === 0 ? styles.btnActive : styles.dayLinetext}>{getDay('today')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              buttonPressed()
-              setWetIndex(1)
-              setCurrentWeather(weather.daily[1])
-              setActiveButton({ active: 1 })
-              }}
-            >
-            <Text style={stateButton.active === 1 ? styles.btnActive : styles.dayLinetext}>{getDay('tomorrow')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              buttonPressed()
-              setWetIndex(2)
-              setCurrentWeather(weather.daily[2])
-              setActiveButton({ active: 2 })
-            }}>
-            <Text style={stateButton.active === 2 ? styles.btnActive : styles.dayLinetext}>{getDay('after')}</Text>
-          </TouchableOpacity>
-        </View>
+        {weather && <View style={styles.daysLine}>
+          {['today', 'tomorrow','after'].map((item, index) => {
+            return <DayOfLine
+              buttonPressed={buttonPressed}
+              setWetIndex={setWetIndex}
+              setCurrentWeather={setCurrentWeather}
+              weather={weather}
+              stateButton={stateButton}
+              setActiveButton={setActiveButton}
+              day={item}
+              index={index} 
+              key={index}    
+                            />
+          })}
+
+        </View>}
         
         {weather ? 
           
@@ -153,7 +148,14 @@ const styles = StyleSheet.create({
     top: 0,
     height: '130%',
   },
-  dayLine: {
+  activityInd: {
+    position: 'relative',
+    left: windWidth * 0.01,
+    transform: [
+      { translateY: windHeight * 0.3 },
+    ],
+  },
+  daysLine: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
@@ -176,3 +178,4 @@ const styles = StyleSheet.create({
   },
   
 });
+

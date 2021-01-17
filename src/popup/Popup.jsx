@@ -4,7 +4,7 @@ import { Dimensions, Image, Animated, StyleSheet, Text, View, TouchableOpacity }
 import { Ionicons, Feather, MaterialCommunityIcons  } from '@expo/vector-icons';
 import { ScreenStackHeaderCenterView } from 'react-native-screens';
 import { windHeight, windWidth } from '../../size';
-import { daysOfWeek, dateNow } from '../main/api/getDay';
+import { daysOfWeek, dateNow } from '../api/getDay';
 import { IoniconsMap, IoniconsMapColors } from '../../assets/weather-icons/Ionicons/IoniconsMap';
 
 export const Popup = ({ route, navigation: { goBack } }) => {
@@ -41,7 +41,7 @@ export const Popup = ({ route, navigation: { goBack } }) => {
           </View>
         </View>
         <View style={styles.weekTempWeather}>
-          <Text style={{ ...styles.text, fontSize: 22, color: 'white' }}>Next Week</Text>
+          <Text style={{ ...styles.text, fontSize: 22, color: 'white' }}>Next Days</Text>
 
           {daysOfWeek.map((elem, ind, array) => {
             let day = Date.now() + 86400 * 1000 * (ind + 1);
@@ -111,10 +111,12 @@ const styles = StyleSheet.create({
   dayWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-end'
   },
   dayTempWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     flex: 6,
+    alignItems: 'baseline',
   }
 })

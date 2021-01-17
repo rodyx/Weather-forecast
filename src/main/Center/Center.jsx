@@ -6,10 +6,12 @@ import {
   View,
   Animated,
 } from "react-native";
-import { Ionicons, Fontisto, MaterialCommunityIcons, SimpleLineIcons, Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons, SimpleLineIcons} from '@expo/vector-icons';
 import { windHeight, windWidth } from "../../../size";
+import { WeatherImages } from '../../../assets/bg_colors/index';
 
 export const Center = ({ animationObj, weather }) => {
+
   return (
     <View style={styles.centerContainer}>
       <Animated.View style={{
@@ -24,17 +26,17 @@ export const Center = ({ animationObj, weather }) => {
         ],
       }}>
 
-        <Image style={{ width: 200, height: 200 }} source={require('../../../assets/weather-icons/Clear.png')} />
-        <Text style={{ ...styles.textCenter, fontSize: 25, marginTop: 10}}>{weather.weather[0].main}</Text>
-        <View style={{ flexDirection: 'row'}}>
+        <Image style={{ width: 200, height: 200}} source={WeatherImages.get(weather.weather[0].main)} />
+        <Text style={{ ...styles.textCenter, fontSize: 25, marginTop: 15 }}>{weather.weather[0].main}</Text>
+        <View style={{ flexDirection: 'row' }}>
           <Text style={{ ...styles.textCenter, fontSize: 120 }}>{Math.round(weather?.temp) || Math.round(weather?.temp.day)}</Text>
           <View style={styles.degree}><Text style={{ fontSize: 60, color: "#41406e" }}>°</Text></View>
         </View>
-        
+
         <View style={styles.smallBox}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <MaterialCommunityIcons name="weather-windy" size={16} color="#41406e" />
-            <Text style={{ ...styles.textCenter, marginLeft: 8 }}>{weather.wind_speed} km/h</Text>
+            <Text style={{ ...styles.textCenter, marginLeft: 8 }}>{Math.round(weather.wind_speed)} km/h</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
             <SimpleLineIcons name="drop" size={16} color="#41406e" />
@@ -48,7 +50,7 @@ export const Center = ({ animationObj, weather }) => {
 
 const styles = StyleSheet.create({
   centerContainer: {
-    height: windHeight * 0.5,
+    height: windHeight * 0.55,
     paddingHorizontal: 25,
     paddingVertical: 25,
     alignItems: "center",
